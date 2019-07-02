@@ -25,7 +25,7 @@ DiffRequest diffRequest = new DiffRequest()
                           .setCurrent(current)
                           .setResultId("org.apache.sling:org.apache.sling.diff:1.0.0");
 
-Feature featureDiff = compareFeatures(previous, current);
+Feature featureDiff = compareFeatures(diffRequest);
 ```
 
 The resulting `featureDiff` is a new `Feature` instance which prototypes from `previous` and where necessary removals sections are populated and new elements may be added.
@@ -56,5 +56,5 @@ DiffRequest diffRequest = new DiffRequest()
                           .addIncludeComparator("configurations")
                           .setResultId("org.apache.sling:org.apache.sling.diff:1.0.0");
 
-Feature featureDiff = compareFeatures(previous, current);
+Feature featureDiff = compareFeatures(diffRequest);
 ```

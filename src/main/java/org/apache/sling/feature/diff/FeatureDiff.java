@@ -17,7 +17,6 @@
 package org.apache.sling.feature.diff;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.ServiceLoader.load;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -25,11 +24,22 @@ import java.util.LinkedList;
 import org.apache.sling.feature.ArtifactId;
 import org.apache.sling.feature.Feature;
 import org.apache.sling.feature.Prototype;
+import org.apache.sling.feature.diff.impl.BundlesComparator;
+import org.apache.sling.feature.diff.impl.ConfigurationsComparator;
+import org.apache.sling.feature.diff.impl.ExtensionsComparator;
 import org.apache.sling.feature.diff.impl.FeatureElementComparator;
+import org.apache.sling.feature.diff.impl.FrameworkPropertiesComparator;
 
 public final class FeatureDiff {
 
     private static final String UPDATER_CLASSIFIER = "updater";
+
+    private static final FeatureElementComparator[] comparators = new FeatureElementComparator[] {
+        new BundlesComparator(),
+        new ConfigurationsComparator(),
+        new ExtensionsComparator(),
+        new FrameworkPropertiesComparator()
+    };
 
     public static Feature compareFeatures(DiffRequest diffRequest) {
         requireNonNull(diffRequest, "Impossible to compare features without specifying them.");
@@ -70,7 +80,7 @@ public final class FeatureDiff {
     protected static Iterable<FeatureElementComparator> loadComparators(DiffRequest diffRequest) {
         Collection<FeatureElementComparator> filteredComparators = new LinkedList<>();
 
-        for (FeatureElementComparator comparator : load(FeatureElementComparator.class)) {
+        for (FeatureElementComparator comparator : comparators) {
             boolean included = !diffRequest.getIncludeComparators().isEmpty() ? diffRequest.getIncludeComparators().contains(comparator.getId()) : true;
             boolean excluded = diffRequest.getExcludeComparators().contains(comparator.getId());
 

@@ -29,9 +29,6 @@ import org.apache.sling.feature.Extension;
 import org.apache.sling.feature.Extensions;
 import org.apache.sling.feature.Feature;
 
-import com.google.auto.service.AutoService;
-
-@AutoService(FeatureElementComparator.class)
 public final class ExtensionsComparator extends AbstractFeatureElementComparator {
 
     public ExtensionsComparator() {

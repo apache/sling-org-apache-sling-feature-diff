@@ -20,9 +20,6 @@ import org.apache.sling.feature.Artifact;
 import org.apache.sling.feature.Artifacts;
 import org.apache.sling.feature.Feature;
 
-import com.google.auto.service.AutoService;
-
-@AutoService(FeatureElementComparator.class)
 public final class BundlesComparator extends AbstractFeatureElementComparator {
 
     public BundlesComparator() {

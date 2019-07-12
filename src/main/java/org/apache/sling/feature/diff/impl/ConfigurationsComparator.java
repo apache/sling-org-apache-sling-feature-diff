@@ -31,6 +31,10 @@ import org.apache.sling.feature.Feature;
 
 public final class ConfigurationsComparator extends AbstractFeatureElementComparator {
 
+    private static final String SERVICE_PID_KEY = "service.pid";
+
+    private static final String SERVICE_FACTORY_PID_KEY = "service.factoryPid";
+
     public ConfigurationsComparator() {
         super("configurations");
     }
@@ -71,8 +75,9 @@ public final class ConfigurationsComparator extends AbstractFeatureElementCompar
         while (previousKeys.hasMoreElements()) {
             String previousKey = previousKeys.nextElement();
 
+            // skip 'service.pid' and 'service.factoryPid' keys
             // no other way to check if a key was removed in a dictionary
-            if (hasKey(previousKey, currentProperties.keys())) {
+            if (!isReservedKey(previousKey) && hasKey(previousKey, currentProperties.keys())) {
                 Object previousValue = previousProperties.get(previousKey);
                 Object currentValue = currentProperties.get(previousKey);
 
@@ -86,17 +91,24 @@ public final class ConfigurationsComparator extends AbstractFeatureElementCompar
         while (currentKeys.hasMoreElements()) {
             String currentKey = currentKeys.nextElement();
 
-            Object previousValue = previousProperties.get(currentKey);
-            Object currentValue = currentProperties.get(currentKey);
+            // skip 'service.pid' and 'service.factoryPid' keys
+            if (!isReservedKey(currentKey)) {
+                Object previousValue = previousProperties.get(currentKey);
+                Object currentValue = currentProperties.get(currentKey);
 
-            if (previousValue == null && currentValue != null) {
-                targetProperties.put(currentKey, currentValue);
+                if (previousValue == null && currentValue != null) {
+                    targetProperties.put(currentKey, currentValue);
+                }
             }
         }
 
         if (!targetProperties.isEmpty()) {
             target.getConfigurations().add(targetConfiguration);
         }
+    }
+
+    private static boolean isReservedKey(String key) {
+        return SERVICE_PID_KEY.equals(key) || SERVICE_FACTORY_PID_KEY.equals(key);
     }
 
     private static boolean areEquals(Object lhs, Object rhs) {

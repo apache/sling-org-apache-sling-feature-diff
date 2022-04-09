@@ -14,16 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.sling.feature.diff;
+package org.apache.sling.feature.diff.impl;
 
-import static org.apache.sling.feature.diff.FeatureDiff.loadComparators;
+import static org.apache.sling.feature.diff.impl.FeatureDiffImpl.loadComparators;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.sling.feature.diff.impl.FeatureElementComparator;
+import org.apache.sling.feature.diff.DiffRequest;
 import org.junit.Test;
 
 public final class FeatureDiffTest {

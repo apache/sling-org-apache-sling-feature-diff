@@ -16,80 +16,13 @@
  */
 package org.apache.sling.feature.diff;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.Collection;
-import java.util.LinkedList;
-
-import org.apache.sling.feature.ArtifactId;
 import org.apache.sling.feature.Feature;
-import org.apache.sling.feature.Prototype;
-import org.apache.sling.feature.diff.impl.BundlesComparator;
-import org.apache.sling.feature.diff.impl.ConfigurationsComparator;
-import org.apache.sling.feature.diff.impl.ExtensionsComparator;
-import org.apache.sling.feature.diff.impl.FeatureElementComparator;
-import org.apache.sling.feature.diff.impl.FrameworkPropertiesComparator;
+import org.apache.sling.feature.diff.impl.FeatureDiffImpl;
 
 public final class FeatureDiff {
 
-    private static final String UPDATER_CLASSIFIER = "updater";
-
-    private static final FeatureElementComparator[] comparators = new FeatureElementComparator[] {
-        new BundlesComparator(),
-        new ConfigurationsComparator(),
-        new ExtensionsComparator(),
-        new FrameworkPropertiesComparator()
-    };
-
     public static Feature compareFeatures(DiffRequest diffRequest) {
-        requireNonNull(diffRequest, "Impossible to compare features without specifying them.");
-        Feature previous = requireNonNull(diffRequest.getPrevious(), "Impossible to compare null previous feature.");
-        Feature current = requireNonNull(diffRequest.getCurrent(), "Impossible to compare null current feature.");
-
-        if (previous.getId().equals(current.getId())) {
-            throw new IllegalArgumentException("Input Features refer to the the same Feature version.");
-        }
-
-        StringBuilder classifier = new StringBuilder();
-        if (current.getId().getClassifier() != null && !current.getId().getClassifier().isEmpty()) {
-            classifier.append(current.getId().getClassifier())
-                      .append('_');
-        }
-        classifier.append(UPDATER_CLASSIFIER);
-
-        ArtifactId resultId = new ArtifactId(current.getId().getGroupId(),
-                                             current.getId().getArtifactId(), 
-                                             current.getId().getVersion(),
-                                             classifier.toString(),
-                                             current.getId().getType());
-
-        Feature target = new Feature(resultId);
-        target.setTitle(previous.getId() + " to " + current.getId());
-        target.setDescription("Computed " + previous.getId() + " to " + current.getId() + " Feature update");
-
-        Prototype prototype = new Prototype(previous.getId());
-        target.setPrototype(prototype);
-
-        for (FeatureElementComparator comparator : loadComparators(diffRequest)) {
-            comparator.computeDiff(previous, current, target);
-        }
-
-        return target;
-    }
-
-    protected static Iterable<FeatureElementComparator> loadComparators(DiffRequest diffRequest) {
-        Collection<FeatureElementComparator> filteredComparators = new LinkedList<>();
-
-        for (FeatureElementComparator comparator : comparators) {
-            boolean included = !diffRequest.getIncludeComparators().isEmpty() ? diffRequest.getIncludeComparators().contains(comparator.getId()) : true;
-            boolean excluded = diffRequest.getExcludeComparators().contains(comparator.getId());
-
-            if (included && !excluded) {
-                filteredComparators.add(comparator);
-            }
-        }
-
-        return filteredComparators;
+        return FeatureDiffImpl.compareFeatures(diffRequest);
     }
 
     /**

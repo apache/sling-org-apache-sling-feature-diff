@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.sling.feature.Artifact;
 import org.apache.sling.feature.ArtifactId;
 import org.apache.sling.feature.Extension;
+import org.apache.sling.feature.ExtensionState;
 import org.apache.sling.feature.Extensions;
 import org.junit.Test;
 
@@ -41,21 +42,21 @@ public class ExtensionsComparatorTest extends AbstractComparatorTest<ExtensionsC
 
     @Test
     public void checkTextExtensionRemoved() {
-        Extension removed = new Extension(TEXT, "removed-TEXT-extension", true);
+        Extension removed = new Extension(TEXT, "removed-TEXT-extension", ExtensionState.REQUIRED);
         removed.setText("This is just a test");
         checkRemovedExtension(removed);
     }
 
     @Test
     public void checkJSONExtensionRemoved() {
-        Extension removed = new Extension(JSON, "removed-JSON-extension", true);
+        Extension removed = new Extension(JSON, "removed-JSON-extension", ExtensionState.REQUIRED);
         removed.setJSON("[true, 100, null]");
         checkRemovedExtension(removed);
     }
 
     @Test
     public void checkArtifactsExtensionRemoved() {
-        Extension removed = new Extension(ARTIFACTS, "removed-ARTIFACTS-extension", true);
+        Extension removed = new Extension(ARTIFACTS, "removed-ARTIFACTS-extension", ExtensionState.REQUIRED);
         removed.getArtifacts().add(new Artifact(ArtifactId.parse("org.apache.sling:org.apache.sling.diff:1.0.0")));
         checkRemovedExtension(removed);
     }
@@ -73,11 +74,11 @@ public class ExtensionsComparatorTest extends AbstractComparatorTest<ExtensionsC
 
     @Test
     public void checkRemovedArtifacts() {
-        Extension previousExtension = new Extension(ARTIFACTS, "content-packages", true);
+        Extension previousExtension = new Extension(ARTIFACTS, "content-packages", ExtensionState.REQUIRED);
         ArtifactId removedId = ArtifactId.parse("org.apache.sling:org.apache.sling.diff:1.0.0");
         previousExtension.getArtifacts().add(new Artifact(removedId));
 
-        Extension currentExtension = new Extension(ARTIFACTS, "content-packages", true);
+        Extension currentExtension = new Extension(ARTIFACTS, "content-packages", ExtensionState.REQUIRED);
 
         comparator.computeDiff(previousExtension, currentExtension, targetFeature);
 
@@ -89,10 +90,10 @@ public class ExtensionsComparatorTest extends AbstractComparatorTest<ExtensionsC
 
     @Test
     public void checkTextExtensionUpdated() {
-        Extension previous = new Extension(TEXT, "repoinit", true);
+        Extension previous = new Extension(TEXT, "repoinit", ExtensionState.REQUIRED);
         previous.setText("create path /content/example.com(mixin mix:referenceable)");
 
-        Extension current = new Extension(TEXT, "repoinit", true);
+        Extension current = new Extension(TEXT, "repoinit", ExtensionState.REQUIRED);
         current.setText("create path /content/example.com(mixin mix:referenceable)\ncreate path (nt:unstructured) /var");
         comparator.computeDiff(previous, current, targetFeature);
 
@@ -102,10 +103,10 @@ public class ExtensionsComparatorTest extends AbstractComparatorTest<ExtensionsC
 
     @Test
     public void checkJSONExtensionUpdated() {
-        Extension previous = new Extension(JSON, "api-regions", true);
+        Extension previous = new Extension(JSON, "api-regions", ExtensionState.REQUIRED);
         previous.setJSON("{\"name\": \"global\"}");
 
-        Extension current = new Extension(JSON, "api-regions", true);
+        Extension current = new Extension(JSON, "api-regions", ExtensionState.REQUIRED);
         current.setJSON("{\"name\": \"deprecated\"}");
         comparator.computeDiff(previous, current, targetFeature);
 
@@ -115,11 +116,11 @@ public class ExtensionsComparatorTest extends AbstractComparatorTest<ExtensionsC
 
     @Test
     public void checkArtifactsExtensionUpdated() {
-        Extension previous = new Extension(ARTIFACTS, "content-packages", true);
+        Extension previous = new Extension(ARTIFACTS, "content-packages", ExtensionState.REQUIRED);
         ArtifactId removedId = ArtifactId.parse("org.apache.sling:org.apache.sling.diff:1.0.0");
         previous.getArtifacts().add(new Artifact(removedId));
 
-        Extension current = new Extension(ARTIFACTS, "content-packages", true);
+        Extension current = new Extension(ARTIFACTS, "content-packages", ExtensionState.REQUIRED);
         ArtifactId updatedId = ArtifactId.parse("org.apache.sling:org.apache.sling.diff:2.0.0");
         current.getArtifacts().add(new Artifact(updatedId));
 

@@ -16,12 +16,12 @@
  */
 package org.apache.sling.feature.diff.impl;
 
-import static javax.json.Json.createReader;
+import static jakarta.json.Json.createReader;
 
 import java.io.StringReader;
 import java.util.LinkedList;
 
-import javax.json.JsonValue;
+import jakarta.json.JsonValue;
 
 import org.apache.sling.feature.Artifact;
 import org.apache.sling.feature.ArtifactId;
@@ -65,7 +65,7 @@ public final class ExtensionsComparator extends AbstractFeatureElementComparator
 
         switch (previousExtension.getType()) {
             case ARTIFACTS:
-                Extension targetExtension = new Extension(previousExtension.getType(), previousExtension.getName(), previousExtension.isRequired());
+                Extension targetExtension = new Extension(previousExtension.getType(), previousExtension.getName(), previousExtension.getState());
 
                 for (Artifact previous : previousExtension.getArtifacts()) {
                     Artifact current = currentExtension.getArtifacts().getSame(previous.getId());

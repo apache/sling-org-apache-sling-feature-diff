@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>org.apache.sling.feature.diff</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <name>Apache Sling Feature Model Diff Tool</name>
     <description>Feature Model diff tool for Apache Sling</description>
@@ -42,7 +42,7 @@
         <connection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-feature-diff.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-feature-diff.git</developerConnection>
         <url>https://gitbox.apache.org/repos/asf?p=sling-org-apache-sling-feature-diff.git</url>
-        <tag>HEAD</tag>
+        <tag>org.apache.sling.feature.diff-0.1.0</tag>
     </scm>
 
   <dependencies>

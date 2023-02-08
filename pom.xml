@@ -28,7 +28,7 @@
     <artifactId>org.apache.sling.feature.diff</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
-    <name>Apache Sling Feature Model diff tool</name>
+    <name>Apache Sling Feature Model Diff Tool</name>
     <description>Feature Model diff tool for Apache Sling</description>
 
     <properties>
